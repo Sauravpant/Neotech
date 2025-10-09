@@ -1,5 +1,6 @@
 import express from "express";
 import type { Express } from "express";
+import errorMiddleware from "./middlewares/error-handler.middleware";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -20,11 +21,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 import authRoutes from "./routes/auth.routes";
-import errorMiddleware from "./middlewares/error-handler.middleware";
+import userRoutes from "./routes/user.routes";
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 
-
-
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 export default app;
