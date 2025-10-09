@@ -32,7 +32,7 @@ export const loginService = async (data: Login): Promise<LoginResponse> => {
   }
   const accessToken = await generateAccessToken(user._id as string, "user");
   const refreshToken = await generateRefreshToken(user._id as string, "user");
-  await User.findByIdAndUpdate(user._id, { refreshToken });
+  await User.findByIdAndUpdate(user._id, { refreshToken, isDeactivated: false });
   const result: UserResponse = {
     _id: user._id,
     name: user.name,
@@ -41,7 +41,7 @@ export const loginService = async (data: Login): Promise<LoginResponse> => {
     address: user.address || null,
     role: user.role,
     isVerified: user.isVerified,
-    isDeactivated: user.isDeactivated,
+    isDeactivated: false,
     imageUrl: user.imageUrl || null,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
