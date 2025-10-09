@@ -45,6 +45,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       select: false,
     },
+    isDeactivated: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
