@@ -12,3 +12,8 @@ export interface ICart extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CartResponse {
+  user: string;
+  items: ICartItem[];
+}
