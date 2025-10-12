@@ -125,7 +125,7 @@ export const getProductByIdService = async (productId: string): Promise<ProductB
     //Pipeline Stage 8:Group the scattered objects
     {
       $group: {
-        _id: "$_id",
+        _id: "$_id", //Group by ID (Same as GROUP BY in SQL)
         name: { $first: "$name" },
         description: { $first: "$description" },
         price: { $first: "$price" },
@@ -134,19 +134,27 @@ export const getProductByIdService = async (productId: string): Promise<ProductB
         countInStock: { $first: "$countInStock" },
         category: { $first: "$category" },
         avgRating: { $avg: "$reviews.rating" },
-        totalReviews: { $sum: 1 },
+        totalReviews: { $sum: { $cond: [{ $ifNull: ["$reviews._id", false] }, 1, 0] } },
         reviews: {
           $push: {
-            _id: "$reviews._id",
-            rating: "$reviews.rating",
-            comment: { $ifNull: ["$reviews.comment", null] },
-            createdAt: "$reviews.createdAt",
-            updatedAt: "$reviews.updatedAt",
-            user: {
-              _id: "$reviews.user._id",
-              name: "$reviews.user.name",
-              imageUrl: { $ifNull: ["$reviews.user.imageUrl", null] },
-            },
+            $cond: [
+              { $ifNull: ["$reviews._id", false] }, //check If review exists
+              //If review exists push this
+              {
+                _id: "$reviews._id",
+                rating: "$reviews.rating",
+                comment: { $ifNull: ["$reviews.comment", null] },
+                createdAt: "$reviews.createdAt",
+                updatedAt: "$reviews.updatedAt",
+                user: {
+                  _id: "$reviews.user._id",
+                  name: "$reviews.user.name",
+                  imageUrl: { $ifNull: ["$reviews.user.imageUrl", null] },
+                },
+              },
+              //Else remove the document and return null
+              "$$REMOVE",
+            ],
           },
         },
       },
