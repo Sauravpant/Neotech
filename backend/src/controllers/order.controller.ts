@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { createOrderService, handleStripeWebhookService } from "../services/order.services";
+import {
+  cancelOrderService,
+  createOrderService,
+  getMyOrdersService,
+  getOrderByIdService,
+  handleStripeWebhookService,
+} from "../services/order.services";
 import { AuthenticatedRequest } from "../types/auth.types";
 import { orderSchema } from "../validators/order.validators";
 import { ApiResponse } from "../utils/api-response";
@@ -36,4 +42,23 @@ export const stripeWebhook = asyncHandler(async (req: Request, res: Response) =>
   }
   await handleStripeWebhookService(event);
   res.json({ received: true });
+});
+
+export const getOrderById = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.user._id.toString();
+  const { orderId } = req.params;
+  const result = await getOrderByIdService(userId, orderId);
+  return res.status(200).json(new ApiResponse(200, result, "Order fetched successfully"));
+});
+
+export const getMyOrders = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const result = await getMyOrdersService(req.user._id.toString());
+  return res.status(200).json(new ApiResponse(200, result, "Orders fetched successfully"));
+});
+
+export const cancelOrder = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.user._id.toString();
+  const { orderId } = req.params;
+  const result = await cancelOrderService(userId, orderId);
+  return res.status(200).json(new ApiResponse(200, result, "Order cancelled successfully"));
 });

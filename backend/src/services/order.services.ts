@@ -2,9 +2,13 @@ import { Order } from "../models/order.models";
 import { Product } from "../models/product.models";
 import { stripe } from "../configs/stripe";
 import { AppError } from "../utils/app-error";
-import { CreateOrderInput } from "../types/order.types";
+import { CreateOrderInput, OrderByIdResponse, OrderResponse } from "../types/order.types";
+import { Types } from "mongoose";
+import { IUser } from "../types/user.types";
 
 const environment = process.env.NODE_ENV;
+
+const validateObjectId = (id: string) => Types.ObjectId.isValid(id);
 
 export const createOrderService = async ({ userId, products, shippingAddress, paymentMethod }: CreateOrderInput) => {
   const productIds = products.map((p) => p.product);
@@ -71,7 +75,7 @@ export const createOrderService = async ({ userId, products, shippingAddress, pa
   };
 };
 
-export const handleStripeWebhookService = async (event: any) => {
+export const handleStripeWebhookService = async (event: any): Promise<void> => {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as any;
     const orderId = session.metadata.orderId;
@@ -83,4 +87,78 @@ export const handleStripeWebhookService = async (event: any) => {
       await order.save();
     }
   }
+};
+
+export const cancelOrderService = async (userId: string, orderId: string): Promise<void> => {
+  if (!validateObjectId(userId) || !validateObjectId(orderId)) {
+    throw new AppError(400, "Invalid id");
+  }
+  const order = await Order.findOne({ _id: orderId, user: userId });
+  if (!order) {
+    throw new AppError(404, "Order doesnt exist");
+  }
+  if (order.status === "Pending" || order.status === "Processing") {
+    order.status = "Cancelled";
+    await order.save();
+  } else {
+    throw new AppError(400, `The order is already ${order.status}. Cannot cancel`);
+  }
+};
+
+export const getMyOrdersService = async (userId: string): Promise<OrderResponse[]> => {
+  const orders = await Order.find({ user: userId }).lean();
+  const userOrders = orders.map((order) => ({
+    _id: order._id.toString(),
+    paymentMethod: order.paymentMethod,
+    status: order.status,
+    totalPrice: order.totalPrice,
+    shippingAddress: order.shippingAddress,
+    isPaid: order.isPaid,
+    paidAt: order.paidAt ?? null,
+    isDelivered: order.isDelivered,
+    deliveredAt: order.deliveredAt ?? null,
+    createdAt: order.createdAt,
+  }));
+
+  return userOrders;
+};
+
+export const getOrderByIdService = async (userId: string, orderId: string): Promise<OrderByIdResponse> => {
+  if (!validateObjectId(userId) || !validateObjectId(orderId)) {
+    throw new AppError(400, "Invalid ID");
+  }
+  const order = await Order.findOne({ _id: orderId, user: userId })
+    .populate("products.product", "name price imageUrl")
+    .populate<{ user: IUser }>("user", "name")
+    .lean();
+
+  if (!order) {
+    throw new AppError(404, "Order not found");
+  }
+
+  const userOrder = {
+    id: order._id.toString(),
+    user: order.user.name,
+    products: order.products.map((item: any) => ({
+      product: {
+        id: item.product?._id?.toString(),
+        name: item.product?.name,
+        price: item.product?.price,
+        image: item.product?.imageUrl,
+      },
+      quantity: item.quantity,
+    })),
+    shippingAddress: order.shippingAddress,
+    paymentMethod: order.paymentMethod,
+    totalPrice: order.totalPrice,
+    isPaid: order.isPaid,
+    paidAt: order.paidAt ?? null,
+    isDelivered: order.isDelivered,
+    deliveredAt: order.deliveredAt ?? null,
+    status: order.status,
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt,
+  };
+
+  return userOrder;
 };
