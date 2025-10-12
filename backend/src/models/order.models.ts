@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
     },
     paymentMethod: {
       type: String,
+      enum: ["COD", "Stripe"],
       required: true,
     },
     totalPrice: {
@@ -39,6 +40,10 @@ const orderSchema = new mongoose.Schema<IOrder>(
       type: Boolean,
       required: true,
       default: false,
+    },
+    stripeIntentId: {
+      type: String,
+      default: "",
     },
     paidAt: {
       type: Date,
