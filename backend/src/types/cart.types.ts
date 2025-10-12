@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose";
 
 interface ICartItem {
+  _id: Types.ObjectId;
   product: Types.ObjectId;
   quantity: number;
 }
@@ -15,5 +16,35 @@ export interface ICart extends Document {
 
 export interface CartResponse {
   user: string;
-  items: ICartItem[];
+  items: {
+    _id: string;
+    quantity: number;
+    product: {
+      _id: string;
+      name: string;
+      price: number;
+      discount: number;
+      imageUrl: string;
+    };
+  }[];
 }
+
+export type LeanProduct = {
+  _id: Types.ObjectId;
+  name: string;
+  price: number;
+  discount: number;
+  imageUrl: string;
+};
+
+export type LeanCartItem = {
+  _id: Types.ObjectId;
+  quantity: number;
+  product: LeanProduct;
+};
+
+export type LeanCart = {
+  _id: Types.ObjectId;
+  user: Types.ObjectId;
+  items: LeanCartItem[];
+};
