@@ -22,7 +22,7 @@ export const addToWishlistService = async (userId: string, productId: string): P
     },
     { $addToSet: { products: productId } },
     { new: true, upsert: true }
-  ).populate<{ products: IProduct[] }>("products", "_id name price imageUrl");
+  ).populate<{ products: IProduct[] }>("products", "_id name price discount imageUrl countInStock");
 
   return {
     user: userId,
@@ -32,6 +32,8 @@ export const addToWishlistService = async (userId: string, productId: string): P
         name: p.name,
         price: p.price,
         imageUrl: p.imageUrl || null,
+        countInStock: p.countInStock,
+        discount: p.discount,
       })) || [],
   };
 };
@@ -46,7 +48,7 @@ export const removeFromWishlistService = async (userId: string, productId: strin
       $pull: { products: productId },
     },
     { new: true }
-  ).populate<{ products: IProduct[] }>("products", "_id name price imageUrl");
+  ).populate<{ products: IProduct[] }>("products", "_id name price discount imageUrl countInStock");
 
   return {
     user: userId,
@@ -56,6 +58,8 @@ export const removeFromWishlistService = async (userId: string, productId: strin
         name: p.name,
         price: p.price,
         imageUrl: p.imageUrl || null,
+        countInStock: p.countInStock,
+        discount: p.discount,
       })) || [],
   };
 };
@@ -66,7 +70,7 @@ export const getMyWishlistService = async (userId: string): Promise<WishlistResp
   }
   const wishlist = await Wishlist.findOne({
     user: userId,
-  }).populate<{ products: IProduct[] }>("products", "_id name price imageUrl");
+  }).populate<{ products: IProduct[] }>("products", "_id name price discount imageUrl countInStock");
 
   return {
     user: userId,
@@ -76,6 +80,8 @@ export const getMyWishlistService = async (userId: string): Promise<WishlistResp
         name: p.name,
         price: p.price,
         imageUrl: p.imageUrl || null,
+        countInStock: p.countInStock,
+        discount: p.discount,
       })) || [],
   };
 };

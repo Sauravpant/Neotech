@@ -12,5 +12,7 @@ export interface WishlistResponse {
     name: string;
     imageUrl: string | null;
     price: number;
+    discount?: number;
+    countInStock?: number;
   }[];
 }
