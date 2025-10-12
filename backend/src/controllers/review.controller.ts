@@ -6,9 +6,9 @@ import { AuthenticatedRequest } from "../types/auth.types";
 import { createReviewSchema, updateReviewSchema } from "../validators/review.validators";
 
 export const createReview = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-  const { productId } = req.params;
+  const { id } = req.params;
   const data = createReviewSchema.parse(req.body);
-  const review = await createReviewService(req.user._id.toString(), productId, data);
+  const review = await createReviewService(req.user._id.toString(), id, data);
   return res.status(201).json(new ApiResponse(201, review, "Review created successfully"));
 });
 

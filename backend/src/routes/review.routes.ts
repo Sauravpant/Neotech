@@ -9,7 +9,7 @@ router.use(verifyJWT);
 router.use(verifyUser);
 
 router.get("/get-my-reviews", getMyReviews);
-router.post("/create-review", createReview);
+router.post("/create-review/:id", createReview);
 router.patch("/update-review/:id", updateReview);
 router.delete("/delete-review/:id", deleteReview);
 
