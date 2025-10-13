@@ -22,9 +22,28 @@ app.use(cookieParser());
 
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import productRoutes from "./routes/product.routes";
+import reviewRoutes from "./routes/review.routes";
+import cartRoutes from "./routes/cart.routes";
+import orderRoutes from "./routes/order.routes";
+import wishlistRoutes from "./routes/wishlist.routes";
+import reportRoutes from "./routes/report.routes";
+
+//Admin routes
+import adminCategoryRoutes from "./routes/admin/category.routes";
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/review", reviewRoutes);
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1/wishlist", wishlistRoutes);
+app.use("/api/v1/report", reportRoutes);
+
+// Admin routes
+app.use("/api/v1/admin/category", adminCategoryRoutes);
+
 
 app.use(errorMiddleware);
 export default app;
