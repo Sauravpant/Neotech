@@ -6,4 +6,6 @@ export interface ICategory {
   slug: string;
   description: string;
   totalProducts: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
