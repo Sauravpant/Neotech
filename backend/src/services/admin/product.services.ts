@@ -4,6 +4,7 @@ import { deleteFromCloudinary, uploadToCloudinary } from "../../utils/cloudinary
 import { AppError } from "../../utils/app-error";
 import { Product } from "../../models/product.models";
 import { Category } from "../../models/category.models";
+import { Order } from "../../models/order.models";
 
 export const addProductService = async (data: AddProduct, image: ProductImage): Promise<void> => {
   //Check if the category exists
@@ -111,8 +112,8 @@ export const deleteProductService = async (productId: string): Promise<void> => 
       category.totalProducts -= 1;
       await category.save({ session });
     }
-
     await product.deleteOne({ _id: productId }).session(session);
+    await Order.deleteMany({ "products.product": productId }).session(session);
     await session.commitTransaction();
   } catch (err: any) {
     await session.abortTransaction();
