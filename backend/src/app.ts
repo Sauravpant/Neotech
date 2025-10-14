@@ -38,6 +38,7 @@ import cartRoutes from "./routes/cart.routes";
 import orderRoutes from "./routes/order.routes";
 import wishlistRoutes from "./routes/wishlist.routes";
 import reportRoutes from "./routes/report.routes";
+import categoryRoutes from "./routes/category.routes";
 
 //Admin routes
 import adminCategoryRoutes from "./routes/admin/category.routes";
@@ -55,6 +56,8 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/wishlist", wishlistRoutes);
 app.use("/api/v1/report", reportRoutes);
+app.use("/api/v1/category", categoryRoutes);
+
 
 // Admin routes
 app.use("/api/v1/admin/category", adminCategoryRoutes);
