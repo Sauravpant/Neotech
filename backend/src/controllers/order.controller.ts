@@ -15,11 +15,10 @@ import { stripe } from "../configs/stripe";
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; //Stripe webhook secret
 
 export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
-  const { products, shippingAddress, paymentMethod } = req.body;
+  const { shippingAddress, paymentMethod } = req.body;
   const data = orderSchema.parse({ paymentMethod, shippingAddress });
   const result = await createOrderService({
     userId: req.user._id.toString(),
-    products,
     shippingAddress: data.shippingAddress,
     paymentMethod: data.paymentMethod,
   });

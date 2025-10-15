@@ -29,7 +29,6 @@ interface ProductInput {
 
 export interface CreateOrderInput {
   userId: string;
-  products: ProductInput[];
   shippingAddress: string;
   paymentMethod: "COD" | "Stripe";
 }
