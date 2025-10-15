@@ -1,3 +1,4 @@
+import { Cart } from "../../models/cart.models";
 import { Order } from "../../models/order.models";
 import { GetAllOrders, GetAllOrdersResponse, OrdersResponse, OrderStats, UpdateOrder } from "../../types/admin/order.types";
 import { IUser } from "../../types/user.types";
@@ -72,6 +73,8 @@ export const updateOrderStatusService = async (orderId: string, status: UpdateOr
   //
   order.status = status.status;
   if (status.status === "Delivered") {
+    const userId = order.user._id.toString();
+    await Cart.deleteOne({ user: userId });
     order.isDelivered = true;
     order.deliveredAt = new Date();
   }
@@ -104,16 +107,26 @@ export const deleteOrderService = async (orderId: string): Promise<void> => {
   if (!validateObjectId(orderId)) {
     throw new AppError(400, "Invalid order ID");
   }
-  const order = await Order.findByIdAndDelete(orderId);
+  const order = await Order.findById(orderId);
   if (!order) {
     throw new AppError(404, "Order not found");
+  }
+  const user = order.user.toString();
+  if (order.isPaid) {
+    throw new AppError(400, "Cannot delete a paid order");
+  }
+  if (order.status === "Cancelled" || order.status === "Pending") {
+    //Order can be deleted only if it is Cancelled or Pending
+    await Order.findByIdAndDelete(orderId);
+  } else {
+    throw new AppError(400, `The order is already ${order.status}. Cannot delete`);
   }
 };
 
 export const getOrderStatsService = async (): Promise<OrderStats> => {
   const totalOrders = await Order.countDocuments();
   const totalSalesAgg = await Order.aggregate([{ $match: { isPaid: true } }, { $group: { _id: null, totalSales: { $sum: "$totalPrice" } } }]);
-  const pendingSalesAgg = await Order.aggregate([{ $match: { isPaid: false } }, { $group: { _id: null, totalSales: { $sum: "$totalPrice" } } }]);;
+  const pendingSalesAgg = await Order.aggregate([{ $match: { isPaid: false } }, { $group: { _id: null, totalSales: { $sum: "$totalPrice" } } }]);
   const ordersByStatusAgg = await Order.aggregate([{ $group: { _id: "$status", count: { $sum: 1 } } }]);
   return {
     totalOrders,
