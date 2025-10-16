@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button";
 import { SearchContext } from "@/context/SearchContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { RootState } from "@/store/store";
+import { useGetMyCart } from "@/hooks/user/useCart";
+import { useGetMyWishlist } from "@/hooks/user/useWishlist";
 
 const navItems = [
   { name: "Home", link: "/" },
   { name: "Products", link: "/products" },
   { name: "Categories", link: "/categories" },
-  { name: "Contacts", link: "/contact" },
 ];
 
 const Navbar: React.FC = () => {
@@ -31,6 +32,14 @@ const Navbar: React.FC = () => {
 
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
+  let cartLength = 0;
+  let wishlistLength = 0;
+  if (user && isAuthenticated) {
+    const { data: cart } = useGetMyCart();
+    const { data: wishlist } = useGetMyWishlist();
+    cartLength = cart?.data?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
+    wishlistLength = wishlist?.data?.products.length || 0;
+  }
   const isActive = (path: string) => {
     if (path === "/") {
       return location.pathname === "/";
@@ -39,7 +48,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-slate-50 via-blue-50/30 to-slate-100 border-b border-slate-200/60 sticky top-0 z-50 shadow-sm backdrop-blur-xl">
+    <nav className="bg-gradient-to-r from-slate-100 via-blue-50/30 to-slate-100 border-b border-slate-200/60 sticky top-0 z-50 shadow-sm backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
         <div className="flex h-14 sm:h-16 items-center justify-between">
           <div className="flex items-center">
@@ -47,7 +56,7 @@ const Navbar: React.FC = () => {
               to="/"
               className="text-xl mr-4 sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#2563EB] to-[#0EA5E9] bg-clip-text text-transparent hover:from-[#1D4ED8] hover:to-[#2563EB] transition-all duration-300 flex-shrink-0"
             >
-              TechStore
+              NeoTech
             </Link>
           </div>
           <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
@@ -55,7 +64,7 @@ const Navbar: React.FC = () => {
               <Link
                 key={index}
                 to={item.link}
-                className={`relative px-1 py-2 text-xs xl:text-sm font-medium transition-all duration-300 group ${
+                className={`relative px-1 py-2 text-sm xl:text-lg font-medium transition-all duration-300 group ${
                   isActive(item.link) ? "text-[#2563EB] font-semibold" : "text-slate-600 hover:text-[#2563EB]"
                 }`}
               >
@@ -100,7 +109,7 @@ const Navbar: React.FC = () => {
                 >
                   <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600 group-hover:text-[#2563EB] group-hover:scale-110 transition-transform" />
                   <span className="absolute -top-1 -right-1 bg-[#EF4444] text-white text-xs rounded-full h-4 w-4 flex items-center justify-center shadow-sm">
-                    3
+                    {wishlistLength}
                   </span>
                 </Link>
                 <Link
@@ -109,7 +118,7 @@ const Navbar: React.FC = () => {
                 >
                   <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600 group-hover:text-[#2563EB] group-hover:scale-110 transition-transform" />
                   <span className="absolute -top-1 -right-1 bg-[#2563EB] text-white text-xs rounded-full h-4 w-4 flex items-center justify-center shadow-sm">
-                    2
+                    {cartLength}
                   </span>
                 </Link>
                 <div className="relative">
@@ -117,7 +126,11 @@ const Navbar: React.FC = () => {
                     onClick={() => setProfileMenuOpen(!profileMenuOpen)}
                     className="h-7 w-7 sm:h-8 sm:w-8 lg:h-9 lg:w-9 rounded-full bg-gradient-to-r from-[#2563EB] to-[#0EA5E9] p-0 overflow-hidden border border-[#2563EB]/30 hover:from-[#1D4ED8] hover:to-[#2563EB] transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer group"
                   >
-                    <img className="text-xs sm:text-sm text-white font-medium group-hover:scale-105 transition-transform" src={user?.imageUrl || ""} alt="User Profile" />
+                    <img
+                      className="text-xs sm:text-sm text-white font-medium group-hover:scale-105 transition-transform"
+                      src={user?.imageUrl || ""}
+                      alt="User Profile"
+                    />
                   </Button>
                   {profileMenuOpen && (
                     <div className="absolute -right-3 mt-2 w-44 sm:w-48 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-xl z-50 animate-in fade-in-80">
@@ -155,7 +168,7 @@ const Navbar: React.FC = () => {
               <div className="flex space-x-2 sm:space-x-3">
                 <Link
                   to="/auth/login"
-                  className="px-4 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#1E40AF] to-[#2563EB] text-sm font-medium text-white hover:from-[#1E3A8A] hover:to-[#1D4ED8] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer whitespace-nowrap border border-blue-500/30"
+                  className="px-4 sm:px-6 py-1.5 md:py-2.5 rounded-xl bg-gradient-to-r from-[#1E40AF] to-[#2563EB] text-sm font-medium text-white hover:from-[#1E3A8A] hover:to-[#1D4ED8] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer whitespace-nowrap border border-blue-500/30"
                 >
                   Sign In
                 </Link>
