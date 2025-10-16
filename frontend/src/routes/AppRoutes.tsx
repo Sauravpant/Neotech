@@ -10,6 +10,10 @@ import ProfileSettingsPage from "@/pages/user/ProfileSettingsPage";
 import AccountSettingsPage from "@/pages/user/AccountSettingsPage";
 import ProductsPage from "@/pages/user/ProductsPage";
 import ProductDetailsPage from "@/pages/user/ProductDetailsPage";
+import WishlistPage from "@/pages/user/WishlistPage";
+import CartCheckoutPage from "@/pages/user/CartCheckoutPage";
+import OrderSuccessPage from "@/pages/user/SuccessPage";
+import OrderFailurePage from "@/pages/user/FailurePage";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +27,10 @@ const AppRoutes = () => {
 
       <Route element={<UserLayout />}>
         <Route element={<ProtectedRoutes allowedRole="user" />}>
+          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/cart" element={<CartCheckoutPage />} />
+          <Route path="/order/success" element={<OrderSuccessPage />} />
+          <Route path="/order/failure" element={<OrderFailurePage />} />
           <Route path="/settings" element={<UserSettingsLayout />}>
             <Route index element={<ProfileSettingsPage />} />
             <Route path="account" element={<AccountSettingsPage />} />
