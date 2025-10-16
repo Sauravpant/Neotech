@@ -125,7 +125,7 @@ export const refreshAccessToken = asyncHandler(async (req: Request, res: Respons
   }
   const newAccessToken = await generateAccessToken(user._id.toString(), user.role);
   const data = {
-    id: user._id,
+    id: user._id.toString(),
     name: user.name,
     email: user.email,
     role: user.role,
