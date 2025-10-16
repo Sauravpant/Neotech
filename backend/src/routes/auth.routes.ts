@@ -8,6 +8,7 @@ import {
   forgotPassword,
   verifyAccount,
   deleteAccount,
+  refreshAccessToken,
 } from "../controllers/auth.controller";
 import { verifyJWT } from "../middlewares/auth.middlewares";
 
@@ -21,5 +22,6 @@ router.patch("/change-password", verifyJWT, changePassword);
 router.patch("/forgot-password", forgotPassword);
 router.patch("/verify-account", verifyJWT, verifyAccount);
 router.delete("/delete-account", verifyJWT, deleteAccount);
+router.get("/refresh-token", refreshAccessToken);
 
 export default router;
