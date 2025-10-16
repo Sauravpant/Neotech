@@ -12,7 +12,7 @@ import { getErrorMessage } from "@/lib/getErrorMessage";
 export const useRegister = () => {
   const navigate = useNavigate();
   return useMutation<ApiResponse<null>, unknown, RegisterUser>({
-    mutationFn: (data: RegisterUser) => registerUser(data),
+    mutationFn: (data) => registerUser(data),
     onSuccess: (data) => {
       toast.success(data?.message || "User registered successfully");
       navigate("/auth/login");
@@ -28,7 +28,7 @@ export const useLogin = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   return useMutation<ApiResponse<UserResponse>, unknown, Login>({
-    mutationFn: (data: Login) => loginUser(data),
+    mutationFn: (data) => loginUser(data),
     onSuccess: (data) => {
       dispatch(setUser(data.data));
       const role = data.data.role;
@@ -50,7 +50,7 @@ export const useLogout = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  return useMutation<ApiResponse<null>, unknown, null>({
+  return useMutation<ApiResponse<null>, unknown, void>({
     mutationFn: () => logoutUser(),
     onSuccess: (data) => {
       dispatch(removeUser());
@@ -67,7 +67,7 @@ export const useLogout = () => {
 
 export const useSendOtp = () => {
   return useMutation<ApiResponse<null>, unknown, string>({
-    mutationFn: (email: string) => sendOtp(email),
+    mutationFn: (email) => sendOtp(email),
     onSuccess: (data) => {
       toast.success(data?.message || "OTP sent to your email");
     },
@@ -79,7 +79,7 @@ export const useSendOtp = () => {
 
 export const useChangePassword = () => {
   return useMutation<ApiResponse<null>, unknown, ChangePassword>({
-    mutationFn: (data: ChangePassword) => changePassword(data),
+    mutationFn: (data) => changePassword(data),
     onSuccess: (data) => {
       toast.success(data?.message || "Password changed successfully");
     },
@@ -91,7 +91,7 @@ export const useChangePassword = () => {
 
 export const useForgotPassword = () => {
   return useMutation<ApiResponse<null>, unknown, ForgotPassword>({
-    mutationFn: (data: ForgotPassword) => forgotPassword(data),
+    mutationFn: (data) => forgotPassword(data),
     onSuccess: (data) => {
       toast.success(data?.message || "Password reset successfully");
     },
@@ -119,7 +119,7 @@ export const useDeleteAccount = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  return useMutation<ApiResponse<null>, unknown, null>({
+  return useMutation<ApiResponse<null>, unknown, void>({
     mutationFn: () => deleteAccount(),
     onSuccess: (data) => {
       dispatch(removeUser());

@@ -12,6 +12,7 @@ export const useGetMyWishlist = () => {
     queryKey: ["wishlist", user?._id],
     queryFn: () => getMyWishlist(),
     staleTime: Infinity,
+    enabled: !!user
   });
 };
 

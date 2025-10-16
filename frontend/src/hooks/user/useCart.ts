@@ -12,6 +12,7 @@ export const useGetMyCart = () => {
     queryKey: ["cart", user?._id],
     queryFn: () => getMyCart(),
     staleTime: Infinity,
+    enabled: !!user,
   });
 };
 

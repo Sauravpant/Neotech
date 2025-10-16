@@ -12,7 +12,7 @@ export const useGetMyOrders = () => {
   return useQuery<ApiResponse<OrderResponse[]>, unknown>({
     queryKey: ["orders", user?._id],
     queryFn: () => getMyOrders(),
-    enabled: !!user?._id,
+    enabled: !!user,
     staleTime: Infinity,
   });
 };
@@ -55,11 +55,12 @@ export const useCancelOrder = () => {
   const user = useAuthUser();
   return useMutation<ApiResponse<null>, unknown, string>({
     mutationFn: (orderId: string) => cancelOrder(orderId),
-    onSuccess: () => {
+    onSuccess: (response) => {
+      toast.success(response.message || "Order cancelled successfully!");
       queryClient.invalidateQueries({ queryKey: ["orders", user?._id] });
     },
-    onError: (error) => {
-      console.error("Cancel order failed:", error);
+    onError: (err: any) => {
+      toast.error(getErrorMessage(err) || "Failed to cancel order");
     },
   });
 };
