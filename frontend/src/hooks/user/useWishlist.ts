@@ -3,6 +3,8 @@ import { getMyWishlist, addToWishlist, removeFromWishlist, clearWishlist } from 
 import { useAuthUser } from "./useUser";
 import type { WishlistResponse } from "@/types/user/wishlist.types";
 import type { ApiResponse } from "@/types/common/api.types";
+import toast from "react-hot-toast";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 export const useGetMyWishlist = () => {
   const user = useAuthUser();
@@ -18,11 +20,12 @@ export const useAddToWishlist = () => {
   const user = useAuthUser();
   return useMutation<ApiResponse<WishlistResponse>, unknown, string>({
     mutationFn: (productId: string) => addToWishlist(productId),
-    onSuccess: () => {
+    onSuccess: (response) => {
+      toast.success(response.message || "Product added to wishlist.");
       queryClient.invalidateQueries({ queryKey: ["wishlist", user?._id] });
     },
-    onError: (error) => {
-      console.error("Add to wishlist failed:", error);
+    onError: (err: any) => {
+      toast.error(getErrorMessage(err) || "Failed to add product to wishlist.");
     },
   });
 };
@@ -35,8 +38,8 @@ export const useRemoveFromWishlist = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wishlist", user?._id] });
     },
-    onError: (error) => {
-      console.error("Remove from wishlist failed:", error);
+    onError: (err: any) => {
+      toast.error(getErrorMessage(err) || "Failed to remove product from wishlist.");
     },
   });
 };
@@ -49,8 +52,8 @@ export const useClearWishlist = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wishlist", user?._id] });
     },
-    onError: (error) => {
-      console.error("Clear wishlist failed:", error);
+    onError: (err: any) => {
+      toast.error(getErrorMessage(err) || "Failed to clear wishlist.");
     },
   });
 };
