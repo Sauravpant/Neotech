@@ -14,6 +14,10 @@ import WishlistPage from "@/pages/user/WishlistPage";
 import CartCheckoutPage from "@/pages/user/CartCheckoutPage";
 import OrderSuccessPage from "@/pages/user/SuccessPage";
 import OrderFailurePage from "@/pages/user/FailurePage";
+import ReviewsDetailsPage from "@/pages/user/ReviewsDetailsPage";
+import OrderDetailsPage from "@/pages/user/OrderDetailsPage";
+import ReportDetailsPage from "@/pages/user/ReportDetailsPage";
+import ProfilePage from "@/pages/user/ProfilePage";
 
 const AppRoutes = () => {
   return (
@@ -31,6 +35,10 @@ const AppRoutes = () => {
           <Route path="/cart" element={<CartCheckoutPage />} />
           <Route path="/order/success" element={<OrderSuccessPage />} />
           <Route path="/order/failure" element={<OrderFailurePage />} />
+          <Route path="reviews" element={<ReviewsDetailsPage />} />
+          <Route path="orders" element={<OrderDetailsPage />} />
+          <Route path="reports" element={<ReportDetailsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
           <Route path="/settings" element={<UserSettingsLayout />}>
             <Route index element={<ProfileSettingsPage />} />
             <Route path="account" element={<AccountSettingsPage />} />
