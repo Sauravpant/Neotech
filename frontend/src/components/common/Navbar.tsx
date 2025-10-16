@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useSelector } from "react-redux";
-import { Menu, X, Search, User, Settings, LogOut, Heart, ShoppingCart, Sun, Moon } from "lucide-react";
+import { Menu, X, Search, User, Settings, LogOut, Heart, ShoppingCart, Sun, Moon, ClipboardList, Flag, Star } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { SearchContext } from "@/context/SearchContext";
@@ -8,6 +8,7 @@ import { useTheme } from "@/context/ThemeContext";
 import type { RootState } from "@/store/store";
 import { useGetMyCart } from "@/hooks/user/useCart";
 import { useGetMyWishlist } from "@/hooks/user/useWishlist";
+import { useLogout } from "@/hooks/user/useAuth";
 
 const navItems = [
   { name: "Home", link: "/" },
@@ -24,10 +25,19 @@ const Navbar: React.FC = () => {
   const context = useContext(SearchContext);
   const navigate = useNavigate();
 
+  const { data: cart } = useGetMyCart();
+  const { data: wishlist } = useGetMyWishlist();
+  const { mutate: logout } = useLogout();
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     navigate("/products");
     context?.setSearch(e.target.value);
+  };
+
+  const handleLogOut = () => {
+    logout();
+    navigate("/");
   };
 
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -35,8 +45,6 @@ const Navbar: React.FC = () => {
   let cartLength = 0;
   let wishlistLength = 0;
   if (user && isAuthenticated) {
-    const { data: cart } = useGetMyCart();
-    const { data: wishlist } = useGetMyWishlist();
     cartLength = cart?.data?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
     wishlistLength = wishlist?.data?.products.length || 0;
   }
@@ -148,6 +156,30 @@ const Navbar: React.FC = () => {
                           Profile
                         </Link>
                         <Link
+                          to="/orders"
+                          className="flex items-center px-3 py-2 text-xs sm:text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2563EB] rounded-lg transition-all duration-200 cursor-pointer group/menu"
+                          onClick={() => setProfileMenuOpen(false)}
+                        >
+                          <ClipboardList className="h-3 w-3 sm:h-4 sm:w-4 mr-2 group-hover/menu:scale-110 transition-transform" />
+                          Orders
+                        </Link>
+                        <Link
+                          to="/reviews"
+                          className="flex items-center px-3 py-2 text-xs sm:text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2563EB] rounded-lg transition-all duration-200 cursor-pointer group/menu"
+                          onClick={() => setProfileMenuOpen(false)}
+                        >
+                          <Star className="h-3 w-3 sm:h-4 sm:w-4 mr-2 group-hover/menu:scale-110 transition-transform" />
+                          Reviews
+                        </Link>
+                        <Link
+                          to="/reports"
+                          className="flex items-center px-3 py-2 text-xs sm:text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2563EB] rounded-lg transition-all duration-200 cursor-pointer group/menu"
+                          onClick={() => setProfileMenuOpen(false)}
+                        >
+                          <Flag className="h-3 w-3 sm:h-4 sm:w-4 mr-2 group-hover/menu:scale-110 transition-transform" />
+                          Reports
+                        </Link>
+                        <Link
                           to="/settings"
                           className="flex items-center px-3 py-2 text-xs sm:text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2563EB] rounded-lg transition-all duration-200 cursor-pointer group/menu"
                           onClick={() => setProfileMenuOpen(false)}
@@ -155,7 +187,10 @@ const Navbar: React.FC = () => {
                           <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-2 group-hover/menu:scale-110 transition-transform" />
                           Settings
                         </Link>
-                        <button className="flex items-center w-full px-3 py-2 text-xs sm:text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2563EB] rounded-lg transition-all duration-200 cursor-pointer group/menu">
+                        <button
+                          onClick={handleLogOut}
+                          className="flex items-center w-full px-3 py-2 text-xs sm:text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2563EB] rounded-lg transition-all duration-200 cursor-pointer group/menu"
+                        >
                           <LogOut className="h-3 w-3 sm:h-4 sm:w-4 mr-2 group-hover/menu:scale-110 transition-transform" />
                           Logout
                         </button>
