@@ -101,13 +101,9 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({ products, isLoading, error,
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className=" font-bold text-sm text-red-500 sm:text-lg">$ {product.price.toLocaleString()}</span>
+                    <span className=" font-bold text-sm text-red-500 sm:text-lg">$ {(Number(product.price) * (1 - Number(product.discount) / 100)).toFixed(2)}</span>
                   </div>
-                  {product.discount && (
-                    <span className="block text-gray-400 text-xs sm:text-sm line-through font-medium">
-                      $ {(product.price / (1 - product.discount / 100)).toLocaleString()}
-                    </span>
-                  )}
+                  {product.discount && <span className="block text-gray-400 text-xs sm:text-sm line-through font-medium">$ {product.price}</span>}
                 </div>
 
                 <div
