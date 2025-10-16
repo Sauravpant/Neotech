@@ -8,6 +8,7 @@ import WishListCard from "@/components/user/wishlist/WishListCard";
 import WishlistHeader from "@/components/user/wishlist/WishListHeader";
 import { useAddToCart } from "@/hooks/user/useCart";
 import { useNavigate } from "react-router-dom";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 
 const WishlistPage = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -48,8 +49,16 @@ const WishlistPage = () => {
   if (wishlistItems.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50/30 py-4 sm:py-6">
-        <div className="container mx-auto px-3 sm:px-4 lg:px-6 max-w-6xl">
+        <div className="flex flex-col items-center mx-auto px-3 sm:px-4 lg:px-6 max-w-6xl">
           <EmptyResult title="Your wishlist is empty" subtitle="Start adding products you love to your wishlist!" />
+          <button
+            onClick={() => navigate("/products")}
+            className="inline-flex items-center gap-2  cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-5 md:px-6 py-3 md:py-4 rounded-xl hover:shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:-translate-y-1"
+          >
+            <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
+            Explore Products
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
         </div>
       </div>
     );
