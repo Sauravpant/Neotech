@@ -1,4 +1,3 @@
-// Admin User Types based on backend admin/user.types.ts
 export interface UserDetails {
   _id: string;
   name: string;
@@ -34,7 +33,4 @@ export interface GetUser {
   page?: number;
   limit?: number;
   search?: string;
-  role?: "user" | "admin";
-  isVerified?: boolean;
-  isDeactivated?: boolean;
 }
