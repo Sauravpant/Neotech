@@ -36,7 +36,7 @@ export const getAllUsersService = async (filters: GetUser): Promise<GetAllUsers>
   }));
   return {
     users,
-    total,
+    total: Math.ceil(total / limit),
     page,
     limit,
   };
