@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useUpdateReview } from "@/hooks/user/useReviews";
 import type { UpdateReview } from "@/types/user/review.types";
-import { Edit3 } from "lucide-react";
+import { Edit } from "lucide-react";
 
 interface UpdateReviewDialogProps {
   reviewId: string;
@@ -29,8 +29,9 @@ const UpdateReviewBox: React.FC<UpdateReviewDialogProps> = ({ reviewId }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button aria-label="Edit review" className="p-1 lg:p-2 rounded-lg cursor-pointer hover:bg-gray-100">
-          <Edit3 className="w-4 h-4 text-blue-400" />
+        <button className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-600 bg-green-50 hover:bg-green-100 rounded-md transition-colors">
+          <Edit className="h-3 w-3" />
+          Update
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
