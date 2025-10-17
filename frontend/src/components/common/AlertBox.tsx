@@ -20,16 +20,18 @@ interface AlertBoxProps {
   cancelButton: string;
   confirmButton: string;
   onSubmit: (id: string) => void;
+  className?: string;
 }
+import { cn } from "@/lib/utils";
 
-export const AlertBox: React.FC<AlertBoxProps> = ({ id, button, question, description, cancelButton, confirmButton, onSubmit }) => {
+export const AlertBox: React.FC<AlertBoxProps> = ({ id, button, question, description, cancelButton, confirmButton, onSubmit, className }) => {
   const handleSubmit = () => {
     onSubmit(id);
   };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" className="bg-gray-50 cursor-pointer">
+        <Button variant="outline" className={cn("bg-gray-50 cursor-pointer", className)}>
           {button}
         </Button>
       </AlertDialogTrigger>
