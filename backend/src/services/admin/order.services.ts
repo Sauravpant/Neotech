@@ -51,7 +51,7 @@ export const getAllOrdersService = async (filters: GetAllOrders): Promise<GetAll
     orders: userOrders,
     limit,
     page,
-    total,
+    total: Math.ceil(total / limit),
   };
 };
 
@@ -132,6 +132,6 @@ export const getOrderStatsService = async (): Promise<OrderStats> => {
     totalOrders,
     totalSales: totalSalesAgg[0]?.totalSales || 0,
     pendingSales: pendingSalesAgg[0]?.totalSales || 0,
-    ordersByStatus: ordersByStatusAgg[0] || [],
+    ordersByStatus: ordersByStatusAgg || [],
   };
 };

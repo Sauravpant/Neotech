@@ -33,7 +33,7 @@ export interface OrderStats {
   ordersByStatus: {
     _id: "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
     count: number;
-  };
+  }[];
 }
 [];
 export type GetAllOrders = z.infer<typeof getOrdersSchema>;
