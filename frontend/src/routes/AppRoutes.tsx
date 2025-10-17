@@ -18,6 +18,14 @@ import ReviewsDetailsPage from "@/pages/user/ReviewsDetailsPage";
 import OrderDetailsPage from "@/pages/user/OrderDetailsPage";
 import ReportDetailsPage from "@/pages/user/ReportDetailsPage";
 import ProfilePage from "@/pages/user/ProfilePage";
+import AdminLayout from "@/components/layout/AdminLayout";
+import DashboardPage from "@/pages/admin/DashboardPage";
+import UsersPage from "@/pages/admin/UsersPage";
+import ReportsPage from "@/pages/admin/ReportsPage";
+import ReviewsPage from "@/pages/admin/ReviewsPage";
+import { OrdersPage } from "@/pages/admin/OrdersPage";
+import CategoriesPage from "@/pages/admin/CategoryPage";
+import ProductPage from "@/pages/admin/ProductPage";
 
 const AppRoutes = () => {
   return (
@@ -43,6 +51,17 @@ const AppRoutes = () => {
             <Route index element={<ProfileSettingsPage />} />
             <Route path="account" element={<AccountSettingsPage />} />
           </Route>
+        </Route>
+      </Route>
+      <Route element={<ProtectedRoutes allowedRole="admin" />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="reports" element={<ReportsPage />} />
+          <Route path="reviews" element={<ReviewsPage />} />
+          <Route path="orders" element={<OrdersPage />} />
+          <Route path="products" element={<ProductPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
         </Route>
       </Route>
 
