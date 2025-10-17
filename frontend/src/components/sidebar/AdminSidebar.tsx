@@ -15,7 +15,9 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronRight as ChevronRightIcon,
+  NotebookPen,
 } from "lucide-react";
+import { useLogout } from "@/hooks/user/useAuth";
 
 interface AdminSidebarProps {
   children: React.ReactNode;
@@ -35,7 +37,10 @@ const AdminSidebar = ({ children }: AdminSidebarProps) => {
     { name: "Orders", icon: ShoppingCart, path: "/admin/orders" },
     { name: "Users", icon: Users, path: "/admin/users" },
     { name: "Reports", icon: Flag, path: "/admin/reports" },
+    { name: "Reviews", icon: NotebookPen, path: "/admin/reviews" },
   ];
+
+  const { mutate: logout } = useLogout();
 
   const getCurrentRouteName = () => {
     const currentItem = menuItems.find((item) => item.path === location.pathname);
@@ -43,7 +48,7 @@ const AdminSidebar = ({ children }: AdminSidebarProps) => {
   };
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    logout();
   };
 
   const isActive = (path: string) => location.pathname === path;
