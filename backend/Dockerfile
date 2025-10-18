@@ -1,20 +1,24 @@
 # Base image
 FROM node:18-alpine
 
-# Set working directory
+# Working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first (for caching)
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies and nodemon globally
-RUN npm install && npm install -g nodemon
+# Install dependencies and TypeScript globally
+RUN npm install && npm install -g typescript
 
 # Copy rest of the code
 COPY . .
 
+# Build TS to JS files
+RUN npm run build
+
 # Expose port
 EXPOSE 3000
 
-# Start backend
-CMD ["npm", "run", "dev"]
+# Start backend in production
+CMD ["npm", "start"]
+
