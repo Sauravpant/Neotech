@@ -26,6 +26,8 @@ import ReviewsPage from "@/pages/admin/ReviewsPage";
 import { OrdersPage } from "@/pages/admin/OrdersPage";
 import CategoriesPage from "@/pages/admin/CategoryPage";
 import ProductPage from "@/pages/admin/ProductPage";
+import ForgetPassword from "@/pages/auth/ForgetPasswordPage";
+import ResetPassword from "@/pages/auth/ResetPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -68,6 +70,8 @@ const AppRoutes = () => {
       {/* Authentication Routes */}
       <Route path="/auth/login" element={<LoginPage />} />
       <Route path="/auth/signup" element={<SignupPage />} />
+      <Route path="/forgot-password" element={<ForgetPassword />} />
+      <Route path="/auth/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 };
