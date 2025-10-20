@@ -2,7 +2,7 @@
 
 <p align="center"><img src="https://socialify.git.ci/Sauravpant/Neotech/image?language=1&amp;name=1&amp;owner=1&amp;pattern=Signal&amp;theme=Light" alt="project-image"></p>
 
-<p id="description">Neotech is a full-stack e-commerce platform where users can browse buy and review products with ease. The platform supports product management category browsing filtering sorting and advanced checkout features powered by MongoDB for data handling. <br><br> The platform also includes a dedicated admin dashboard for managing users products categories orders and reviews making it easy to oversee all aspects of the e-commerce ecosystem. Payments are seamlessly integrated with Stripe enabling secure transactions for payment. <br><br>Built entirely with TypeScript Neotech features following  stack:<strong> React.js + Tailwind CSS + shadcn/ui </strong> on the frontend and <strong> Node.js + Express.js + MongoDB </strong>on the backend , containerized using <strong>Docker</strong> and  deployment on Vercel (frontend) and Railway/AWS/DigitalOcean (backend).</p>
+<p id="description">Neotech is a full-stack e-commerce platform where users can browse buy and review products with ease. The platform supports product management category browsing filtering sorting and advanced checkout features powered by MongoDB for data handling. <br><br> The platform also includes a dedicated admin dashboard for managing users products categories orders and reviews making it easy to oversee all aspects of the e-commerce ecosystem. Payments are seamlessly integrated with Stripe enabling secure transactions for payment. <br><br>Built entirely with TypeScript Neotech features following  stack:<strong> React.js + Tailwind CSS + shadcn/ui </strong> on the frontend and <strong> Node.js + Express.js + MongoDB </strong>on the backend , containerized using <strong>Docker</strong> and  deployment on Vercel (frontend) and Render (backend).</p>
 
 <p align="center"><img src="./frontend//public/landing_page.png" alt="landing-page"></p>
 
@@ -28,7 +28,7 @@ Technologies used in the project:
 - Backend – Node.js + Express.js + TypeScript + MongoDB + Mongoose
 - Authentication – JWT
 - Payments – Stripe API
-- Deployments – Vercel (Frontend) + Railway (Backend)
+- Deployments – Vercel (Frontend) + Render (Backend)
 - Containerization - Docker
 
 
